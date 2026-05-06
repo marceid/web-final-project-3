@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <base href="/">
+
+    <link rel="stylesheet" href="/assets/css/sidebar-menu.css">
+    <link rel="stylesheet" href="/assets/css/simplebar.css">
+    <link rel="stylesheet" href="/assets/css/remixicon.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+
+    <link rel="icon" type="image/png" href="/assets/images/favicon.png">
+    <title><%= customer.name %> — Customer Details</title>
+</head>
+<body class="bg-body-bg">
+
+<%- include('partials/header') -%>
+
+<div class="container-fluid">
+    <div class="main-content d-flex flex-column">
+
+        <div class="main-content-container overflow-hidden">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4 mt-1">
+                <h3 class="mb-0">Customer Details</h3>
+
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb align-items-center mb-0 lh-1">
+                        <li class="breadcrumb-item">
+                            <a href="/dashboard" class="d-flex align-items-center text-decoration-none">
+                                <i class="ri-home-8-line fs-15 text-primary me-1"></i>
+                                <span class="text-body fs-14 hover">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="/customers-list" class="text-decoration-none text-body hover fs-14">Customers</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            <span class="text-secondary"><%= customer.name %></span>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card bg-white rounded-10 border border-white p-20 mb-4">
+                        <div class="text-center mb-20">
+                            <div class="rounded-circle bg-primary bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-12"
+                                style="width: 100px; height: 100px;">
+                                <span class="text-primary fw-bold" style="font-size: 36px;">
+                                    <%= customer.name.charAt(0).toUpperCase() %>
+                                </span>
+                            </div>
+                            <h3 class="fs-22 mb-1 pt-1"><%= customer.name %></h3>
+                            <span class="fs-16 text-body"><%= customer.email %></span>
+                        </div>
+
+                        <h3 class="mb-3 pb-3" style="border-bottom: 1px dashed #dee2e6;">Details</h3>
+                        <ul class="ps-0 mb-0 list-unstyled">
+                            <li class="mb-3">
+                                <span class="fs-15 d-block text-secondary fw-medium mb-1">Customer ID</span>
+                                <span class="fs-15 d-block">#<%= customer._id.toString().slice(-6) %></span>
+                            </li>
+                            <li class="mb-3">
+                                <span class="fs-15 d-block text-secondary fw-medium mb-1">Phone</span>
+                                <span class="fs-15 d-block"><%= customer.phone || '—' %></span>
+                            </li>
+                            <li class="mb-3">
+                                <span class="fs-15 d-block text-secondary fw-medium mb-1">City</span>
+                                <span class="fs-15 d-block"><%= customer.city || '—' %></span>
+                            </li>
+                            <li class="mb-3">
+                                <span class="fs-15 d-block text-secondary fw-medium mb-1">Country</span>
+                                <span class="fs-15 d-block"><%= customer.country || '—' %></span>
+                            </li>
+                            <li class="mb-3">
+                                <span class="fs-15 d-block text-secondary fw-medium mb-1">Date Added</span>
+                                <span class="fs-15 d-block">
+                                    <%= customer.createdAt ? customer.createdAt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '—' %>
+                                </span>
+                            </li>
+                        </ul>
+
+                        <div class="d-flex flex-wrap gap-2 mt-3">
+                            <% if (isAdmin) { %>
+                            <a href="/edit-customer/<%= customer._id %>" class="btn btn-primary fw-normal text-white">
+                                <i class="material-symbols-outlined fs-16 fw-normal me-1" style="vertical-align: middle;">edit</i>
+                                Edit
+                            </a>
+                            <form action="/delete-customer/<%= customer._id %>" method="POST"
+                                onsubmit="return confirm('Delete customer <%= customer.name %>?');">
+                                <button type="submit" class="btn btn-danger fw-normal text-white">
+                                    <i class="material-symbols-outlined fs-16 fw-normal me-1" style="vertical-align: middle;">delete</i>
+                                    Delete
+                                </button>
+                            </form>
+                            <% } %>
+                            <a href="/customers-list" class="btn btn-outline-secondary fw-normal">Back</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-8">
+                    <div class="card bg-white rounded-10 border border-white p-20 mb-4">
+                        <h3 class="mb-20">Contact Information</h3>
+                        <div class="row g-4">
+                            <div class="col-sm-6">
+                                <div class="p-3 rounded-10 bg-light-50">
+                                    <span class="material-symbols-outlined text-primary d-block mb-2">mail</span>
+                                    <span class="fs-13 text-secondary fw-medium d-block mb-1">Email Address</span>
+                                    <span class="fs-15 fw-medium text-body d-block"><%= customer.email %></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="p-3 rounded-10 bg-light-50">
+                                    <span class="material-symbols-outlined text-primary d-block mb-2">call</span>
+                                    <span class="fs-13 text-secondary fw-medium d-block mb-1">Phone Number</span>
+                                    <span class="fs-15 fw-medium text-body d-block"><%= customer.phone || '—' %></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="p-3 rounded-10 bg-light-50">
+                                    <span class="material-symbols-outlined text-primary d-block mb-2">location_city</span>
+                                    <span class="fs-13 text-secondary fw-medium d-block mb-1">City</span>
+                                    <span class="fs-15 fw-medium text-body d-block"><%= customer.city || '—' %></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="p-3 rounded-10 bg-light-50">
+                                    <span class="material-symbols-outlined text-primary d-block mb-2">public</span>
+                                    <span class="fs-13 text-secondary fw-medium d-block mb-1">Country</span>
+                                    <span class="fs-15 fw-medium text-body d-block"><%= customer.country || '—' %></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="flex-grow-1"></div>
+
+        <%- include('partials/footer') -%>
+    </div>
+</div>
+
+<script src="/assets/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/js/sidebar-menu.js"></script>
+<script src="/assets/js/simplebar.min.js"></script>
+<script src="/assets/js/custom/custom.js"></script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Links Of CSS File -->
+    <link rel="stylesheet" href="assets/css/sidebar-menu.css">
+    <link rel="stylesheet" href="assets/css/simplebar.css">
+    <link rel="stylesheet" href="assets/css/quill.snow.css">
+    <link rel="stylesheet" href="assets/css/remixicon.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+
+    <!-- Title -->
+    <title>New Product</title>
+</head>
+<body class="bg-body-bg">
+
+<%- include('partials/header') -%>
+
+<!-- Start Main Content Area -->
+<div class="container-fluid">
+    <div class="main-content d-flex flex-column">
+
+
+        <div class="main-content-container overflow-hidden">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4 mt-1">
+                <h3 class="mb-0">Create Product</h3>
+                <% if(message) { %>
+
+                    <div class="alert fs-16 alert-danger bg-danger text-white" role="alert">
+                        <%= message %>
+                    </div>
+
+                <% } %>
+
+
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb align-items-center mb-0 lh-1">
+                        <li class="breadcrumb-item">
+                            <a href="index.html" class="d-flex align-items-center text-decoration-none">
+                                <i class="ri-home-8-line fs-15 text-primary me-1"></i>
+                                <span class="text-body fs-14 hover">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            <span>E-Commerce</span>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            <span class="text-secondary">Create Product</span>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="card bg-white p-20 rounded-10 border border-white mb-4">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h3 class="mb-20">Add a Product</h3>
+                        <form id="product-form" action="/new-product" method="POST" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-20">
+                                        <label class="label fs-16 mb-2">Product Title</label>
+                                        <div class="form-floating">
+                                            <input name="title" required type="text" class="form-control" id="floatingInput1" placeholder="Product Title">
+                                            <label for="floatingInput1">Product Title</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-20">
+                                        <label class="label fs-16 mb-2">Product Type</label>
+                                        <div class="form-floating">
+                                            <select name="type" required class="form-select form-control" id="floatingSelect2" aria-label="Floating label select example">
+                                                <option value="" selected disabled>Select</option>
+                                                <option value="Digital Product">Digital Product</option>
+                                                <option value="Physical Product">Physical Product</option>
+                                            </select>
+                                            <label for="floatingSelect2">Select</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-20">
+                                        <label class="label fs-16 mb-2">SKU</label>
+                                        <div class="form-floating">
+                                            <input name="sku" type="text" required class="form-control" id="floatingInput3" placeholder="SKU">
+                                            <label for="floatingInput3">SKU</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-20">
+                                        <label class="label fs-16 mb-2">Brand Name</label>
+                                        <div class="form-floating">
+                                            <select name="brand" class="form-select form-control" required id="floatingSelect4" aria-label="Floating label select example">
+                                                <option value="" selected disabled>Select</option>
+                                                <option value="Emburo">Emburo</option>
+                                                <option value="Fediz">Fediz</option>
+                                                <option value="Debilop">Debilop</option>
+                                                <option value="Canin">Canin</option>
+                                                <option value="Joya and Marc">Joya and Marc</option>
+                                            </select>
+                                            <label for="floatingSelect4">Select</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group mb-20">
+                                        <label class="label fs-16">Description</label>
+                                        <div id="standalone-container" class="bg-transparent rounded-10">
+                                            <div id="toolbar-container" class="rounded-top-3 bg-transparent">
+                                                        <span class="ql-formats">
+                                                            <select class="ql-font"></select>
+                                                            <select class="ql-size"></select>
+                                                        </span>
+                                                <span class="ql-formats">
+                                                            <button class="ql-bold"></button>
+                                                            <button class="ql-italic"></button>
+                                                            <button class="ql-underline"></button>
+                                                            <button class="ql-strike"></button>
+                                                        </span>
+                                                <span class="ql-formats">
+                                                            <button class="ql-blockquote"></button>
+                                                            <button class="ql-code-block"></button>
+                                                        </span>
+                                                <span class="ql-formats">
+                                                            <button class="ql-list" value="ordered"></button>
+                                                            <button class="ql-list" value="bullet"></button>
+                                                            <button class="ql-indent" value="-1"></button>
+                                                            <button class="ql-indent" value="+1"></button>
+                                                        </span>
+                                                <span class="ql-formats">
+                                                            <button class="ql-link"></button>
+                                                            <button class="ql-image"></button>
+                                                            <button class="ql-video"></button>
+                                                        </span>
+                                            </div>
+                                            <div id="editor-container" style="height: 163px; border-color: #D5D9E2;" class="rounded-bottom-3"></div>
+                                        </div>
+                                        <textarea name="description" id="description-input" style="display:none;"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-20">
+                                        <label class="label fs-16 mb-2">Regular Price</label>
+                                        <div class="form-floating">
+                                            <input name="price" required type="number" min="0" step="0.01" class="form-control" id="floatingInput5" placeholder="Regular Price">
+                                            <label for="floatingInput5">Regular Price</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-lg-12">
+                                    <div class="form-group mb-4 only-file-upload" id="file-upload">
+                                        <label class="label fs-16">Upload Product Images</label>
+                                        <div class="form-control h-100 text-center position-relative p-4 p-lg-5">
+                                            <div class="product-upload">
+                                                <label class="file-upload mb-0">
+                                                    <i class="ri-folder-image-line bg-primary bg-opacity-10 p-2 rounded-1 text-primary"></i>
+                                                    <span class="d-block text-body fs-14">Drag and drop an image or <span class="text-primary text-decoration-underline">Browse</span></span>
+                                                </label>
+                                                <label class="position-absolute top-0 bottom-0 start-0 end-0 cursor" id="upload-container">
+                                                    <input required class="form__file bottom-0" name="image" id="upload-files" type="file" multiple="multiple">
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div id="files-list-container"></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="d-flex gap-2">
+                                        <button type="submit" class="btn btn-primary fw-normal text-white">Create Product</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-4">
+                        <h3 class="mb-20">Product Category & Tags</h3>
+                        <div class="mb-20">
+                            <label class="label fs-16 mb-2">Category</label>
+                            <div class="form-floating">
+                                <select name="category" required class="form-select form-control" id="floatingSelect10" aria-label="Floating label select example" form="product-form">
+                                    <option value="" selected disabled>Select</option>
+                                    <option value="Watch">Watch</option>
+                                    <option value="Mobile">Mobile</option>
+                                    <option value="Laptop">Laptop</option>
+                                    <option value="Headphone">Headphone</option>
+                                    <option value="Shoe">Shoe</option>
+                                </select>
+                                <label for="floatingSelect10">Select</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-grow-1"></div>
+
+        <%- include('partials/footer') -%>
+    </div>
+</div>
+<!-- Start Main Content Area -->
+
+
+<!-- Link Of JS File -->
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/sidebar-menu.js"></script>
+<script src="assets/js/quill.min.js"></script>
+<script src="assets/js/simplebar.min.js"></script>
+<script src="assets/js/custom/custom.js"></script>
+<script>
+    var quill = new Quill('#editor-container', {
+        modules: { toolbar: '#toolbar-container' },
+        theme: 'snow'
+    });
+    document.getElementById('product-form').addEventListener('submit', function () {
+        document.getElementById('description-input').value = quill.root.innerHTML;
+    });
+</script>
+</body>
+</html>

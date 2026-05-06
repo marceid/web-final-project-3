@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <base href="/">
+
+    <link rel="stylesheet" href="assets/css/sidebar-menu.css">
+    <link rel="stylesheet" href="assets/css/simplebar.css">
+    <link rel="stylesheet" href="assets/css/quill.snow.css">
+    <link rel="stylesheet" href="assets/css/remixicon.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <title><%= product.title %> — Product Details</title>
+</head>
+<body class="bg-body-bg">
+
+<%- include('partials/header') -%>
+
+<div class="container-fluid">
+    <div class="main-content d-flex flex-column">
+
+        <div class="main-content-container overflow-hidden">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4 mt-1">
+                <h3 class="mb-0">Product Details</h3>
+
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb align-items-center mb-0 lh-1">
+                        <li class="breadcrumb-item">
+                            <a href="/" class="d-flex align-items-center text-decoration-none">
+                                <i class="ri-home-8-line fs-15 text-primary me-1"></i>
+                                <span class="text-body fs-14 hover">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            <span>E-Commerce</span>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            <a href="/all-products" class="text-decoration-none text-body hover">Products</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            <span class="text-secondary"><%= product.title %></span>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="card bg-white p-20 rounded-10 rounded-bottom-0 border border-white" style="padding-bottom: 50px;">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="pe-60">
+                            <img src="uploads/<%= product.image %>" class="rounded-10 w-100" alt="<%= product.title %>">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="product-details-content mt-4 mt-lg-0" style="max-width: 685px;">
+                            <h3 class="mb-10 fs-26"><%= product.title %></h3>
+                            <h3 class="mb-20">$<%= product.price.toFixed(2) %></h3>
+
+                            <ul class="p-0 mb-0 list-unstyled">
+                                <li class="d-flex align-items-center fs-16 gap-2" style="margin-bottom: 10px;">
+                                    <span class="text-secondary fw-medium">Category:</span>
+                                    <span><%= product.category %></span>
+                                </li>
+                                <li class="d-flex align-items-center fs-16 gap-2" style="margin-bottom: 10px;">
+                                    <span class="text-secondary fw-medium">SKU:</span>
+                                    <span><%= product.sku %></span>
+                                </li>
+                                <li class="d-flex align-items-center fs-16 gap-2" style="margin-bottom: 10px;">
+                                    <span class="text-secondary fw-medium">Brand:</span>
+                                    <span><%= product.brand %></span>
+                                </li>
+                                <li class="d-flex align-items-center fs-16 gap-2" style="margin-bottom: 10px;">
+                                    <span class="text-secondary fw-medium">Type:</span>
+                                    <span><%= product.type %></span>
+                                </li>
+                                <li class="d-flex align-items-center fs-16 gap-2" style="margin-bottom: 10px;">
+                                    <span class="text-secondary fw-medium">Added:</span>
+                                    <span><%= product.createdAt ? product.createdAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—' %></span>
+                                </li>
+                            </ul>
+
+                            <% if (isAdmin) { %>
+                            <div class="d-flex mt-4" style="gap: 10px;">
+                                <a href="/edit-product/<%= product._id %>" class="btn btn-primary text-white fw-normal">
+                                    <i class="material-symbols-outlined fs-16 fw-normal me-1" style="vertical-align: middle;">edit</i>
+                                    Edit Product
+                                </a>
+                                <form action="/delete-product/<%= product._id %>" method="POST">
+                                    <button type="submit" class="btn btn-danger text-white fw-normal">
+                                        <i class="material-symbols-outlined fs-16 fw-normal me-1" style="vertical-align: middle;">delete</i>
+                                        Delete Product
+                                    </button>
+                                </form>
+                            </div>
+                            <% } %>
+                            <div class="mt-3">
+                                <a href="/all-products" class="btn btn-outline-secondary fw-normal">Back to Products</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-light-50 bg-for-dark-description">
+                <div class="mx-auto" style="max-width: 1326px;">
+                    <ul class="nav nav-tabs border-0 tabs-description" id="myTab2" role="tablist" style="gap: 35px;">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link fs-16 text-secondary fw-medium border-0 rounded-0 bg-transparent active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description-tab-pane" type="button" role="tab" aria-controls="description-tab-pane" aria-selected="true" style="padding: 12px 0;">Description</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card bg-white p-20 rounded-10 rounded-top-0 border border-white mb-4">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="description-tab-pane" role="tabpanel" aria-labelledby="description-tab" tabindex="0">
+                        <div class="mx-auto mb-20 fs-16 lh-1-8" style="max-width: 1326px; margin-top: 10px;">
+                            <%- product.description %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="flex-grow-1"></div>
+
+        <%- include('partials/footer') -%>
+    </div>
+</div>
+
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/sidebar-menu.js"></script>
+<script src="assets/js/simplebar.min.js"></script>
+<script src="assets/js/custom/custom.js"></script>
+</body>
+</html>

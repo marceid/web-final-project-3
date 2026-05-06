@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="assets/css/sidebar-menu.css">
+    <link rel="stylesheet" href="assets/css/simplebar.css">
+    <link rel="stylesheet" href="assets/css/remixicon.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <title>Orders List</title>
+</head>
+<body class="bg-body-bg">
+
+<%- include('partials/header') -%>
+
+<div class="container-fluid">
+    <div class="main-content d-flex flex-column">
+
+        <div class="main-content-container overflow-hidden">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4 mt-1">
+                <h3 class="mb-0">Orders List</h3>
+
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb align-items-center mb-0 lh-1">
+                        <li class="breadcrumb-item">
+                            <a href="/dashboard" class="d-flex align-items-center text-decoration-none">
+                                <i class="ri-home-8-line fs-15 text-primary me-1"></i>
+                                <span class="text-body fs-14 hover">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            <span class="text-secondary">Orders List</span>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="card bg-white rounded-10 border border-white mb-4">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 p-20">
+                    <% if (isUserAdmin(user)) { %>
+                    <a href="/new-order" class="btn btn-primary fw-normal text-white d-flex align-items-center gap-1">
+                        <span class="material-symbols-outlined fs-16">add</span>
+                        Add New Order
+                    </a>
+                    <% } %>
+                    <div class="d-flex flex-wrap gap-2 gap-xxl-5 align-items-center">
+                        <form class="table-src-form position-relative m-0" onsubmit="return false;">
+                            <input type="text" id="order-search" class="form-control w-340" placeholder="Search by user or status...">
+                            <div class="src-btn position-absolute top-50 start-0 translate-middle-y bg-transparent p-0 border-0">
+                                <span class="material-symbols-outlined">search</span>
+                            </div>
+                        </form>
+                        <ul class="p-0 mb-0 list-unstyled d-flex align-items-center flex-wrap" style="gap: 20px;">
+                            <li class="fs-16">
+                                All Orders <span class="text-primary">(<%= orders.length %>)</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="default-table-area mx-minus-1 table-orders-list">
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead>
+                            <tr>
+                                <th scope="col" class="fw-medium">Order ID</th>
+                                <th scope="col" class="fw-medium">User</th>
+                                <th scope="col" class="fw-medium">Products</th>
+                                <th scope="col" class="fw-medium">Total</th>
+                                <th scope="col" class="fw-medium">Status</th>
+                                <th scope="col" class="fw-medium">Date</th>
+                                <th scope="col" class="fw-medium">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <% if (orders.length === 0) { %>
+                            <tr>
+                                <td colspan="7" class="text-center text-body py-4">No orders found.</td>
+                            </tr>
+                            <% } %>
+                            <% orders.forEach(o => { %>
+                            <%
+                                const statusClass = {
+                                    pending:    'bg-warning text-dark',
+                                    processing: 'bg-info text-dark',
+                                    shipped:    'bg-primary',
+                                    delivered:  'bg-success',
+                                    cancelled:  'bg-danger'
+                                }[o.status] || 'bg-secondary';
+                                const userName = o.user ? o.user.username : '—';
+                                const userEmail = o.user ? o.user.email : '';
+                            %>
+                            <tr data-searchable="<%= [userName, userEmail, o.status].join(' ').toLowerCase() %>">
+                                <td class="text-body">#<%= o._id.toString().slice(-6) %></td>
+                                <td class="text-body fw-medium"><%= userName %></td>
+                                <td class="text-body"><%= o.products.length %> item<%= o.products.length !== 1 ? 's' : '' %></td>
+                                <td class="text-body">$<%= o.totalAmount.toFixed(2) %></td>
+                                <td>
+                                    <span class="badge <%= statusClass %>">
+                                        <%= o.status.charAt(0).toUpperCase() + o.status.slice(1) %>
+                                    </span>
+                                </td>
+                                <td class="text-body"><%= o.createdAt ? o.createdAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—' %></td>
+                                <td>
+                                    <div class="d-flex align-items-center" style="gap: 12px;">
+                                        <a href="/order-details/<%= o._id %>"
+                                            class="bg-transparent p-0 border-0 hover-text-primary d-flex"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="View Order">
+                                            <i class="material-symbols-outlined fs-16 fw-normal text-body">visibility</i>
+                                        </a>
+                                        <% if (isUserAdmin(user)) { %>
+                                        <a href="/edit-order/<%= o._id %>"
+                                            class="bg-transparent p-0 border-0 hover-text-primary d-flex"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Order">
+                                            <i class="material-symbols-outlined fs-16 fw-normal text-body">edit</i>
+                                        </a>
+                                        <form action="/delete-order/<%= o._id %>" method="POST" style="display:inline;"
+                                            onsubmit="return confirm('Delete order #<%= o._id.toString().slice(-6) %>?');">
+                                            <button type="submit" class="bg-transparent p-0 border-0 hover-text-danger"
+                                                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete Order">
+                                                <i class="material-symbols-outlined fs-16 fw-normal text-body">delete</i>
+                                            </button>
+                                        </form>
+                                        <% } %>
+                                    </div>
+                                </td>
+                            </tr>
+                            <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex justify-content-center justify-content-sm-between align-items-center text-center flex-wrap gap-2 showing-wrap pt-15 p-20">
+                        <span class="fs-15" id="showing-count">Showing <%= orders.length %> <%= orders.length === 1 ? 'entry' : 'entries' %></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-grow-1"></div>
+
+        <%- include('partials/footer') -%>
+    </div>
+</div>
+
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/sidebar-menu.js"></script>
+<script src="assets/js/simplebar.min.js"></script>
+<script src="assets/js/custom/custom.js"></script>
+<script>
+    document.getElementById('order-search').addEventListener('input', function () {
+        const query = this.value.toLowerCase();
+        const rows  = document.querySelectorAll('.table-orders-list tbody tr[data-searchable]');
+        let visible = 0;
+        rows.forEach(row => {
+            const match = row.dataset.searchable.includes(query);
+            row.style.display = match ? '' : 'none';
+            if (match) visible++;
+        });
+        const label = visible === 1 ? 'entry' : 'entries';
+        document.getElementById('showing-count').textContent = `Showing ${visible} ${label}`;
+    });
+</script>
+</body>
+</html>

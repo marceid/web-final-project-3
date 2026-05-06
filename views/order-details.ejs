@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <base href="/">
+
+    <link rel="stylesheet" href="/assets/css/sidebar-menu.css">
+    <link rel="stylesheet" href="/assets/css/simplebar.css">
+    <link rel="stylesheet" href="/assets/css/remixicon.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+
+    <link rel="icon" type="image/png" href="/assets/images/favicon.png">
+    <title>Order #<%= order._id.toString().slice(-6) %> — Details</title>
+</head>
+<body class="bg-body-bg">
+
+<%- include('partials/header') -%>
+
+<%
+const statusClass = {
+    pending:    'bg-warning text-dark',
+    processing: 'bg-info text-dark',
+    shipped:    'bg-primary',
+    delivered:  'bg-success',
+    cancelled:  'bg-danger'
+}[order.status] || 'bg-secondary';
+%>
+
+<div class="container-fluid">
+    <div class="main-content d-flex flex-column">
+
+        <div class="main-content-container overflow-hidden">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4 mt-1">
+                <h3 class="mb-0">Order Details</h3>
+
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb align-items-center mb-0 lh-1">
+                        <li class="breadcrumb-item">
+                            <a href="/dashboard" class="d-flex align-items-center text-decoration-none">
+                                <i class="ri-home-8-line fs-15 text-primary me-1"></i>
+                                <span class="text-body fs-14 hover">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="/orders-list" class="text-decoration-none text-body hover fs-14">Orders</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            <span class="text-secondary">#<%= order._id.toString().slice(-6) %></span>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="row">
+                <!-- Left: Summary -->
+                <div class="col-lg-4">
+                    <div class="card bg-white rounded-10 border border-white p-20 mb-4">
+                        <div class="text-center mb-20">
+                            <div class="rounded-circle bg-primary bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-12"
+                                style="width: 100px; height: 100px;">
+                                <span class="material-symbols-outlined text-primary" style="font-size: 42px;">receipt_long</span>
+                            </div>
+                            <h3 class="fs-22 mb-1 pt-1">Order #<%= order._id.toString().slice(-6) %></h3>
+                            <span class="badge <%= statusClass %> fs-14">
+                                <%= order.status.charAt(0).toUpperCase() + order.status.slice(1) %>
+                            </span>
+                        </div>
+
+                        <h3 class="mb-3 pb-3" style="border-bottom: 1px dashed #dee2e6;">Summary</h3>
+                        <ul class="ps-0 mb-0 list-unstyled">
+                            <li class="mb-3">
+                                <span class="fs-15 d-block text-secondary fw-medium mb-1">Order ID</span>
+                                <span class="fs-15 d-block">#<%= order._id.toString().slice(-6) %></span>
+                            </li>
+                            <li class="mb-3">
+                                <span class="fs-15 d-block text-secondary fw-medium mb-1">User</span>
+                                <span class="fs-15 d-block"><%= order.user ? order.user.username : '—' %></span>
+                                <% if (order.user && order.user.email) { %>
+                                <span class="fs-13 d-block text-secondary"><%= order.user.email %></span>
+                                <% } %>
+                            </li>
+                            <li class="mb-3">
+                                <span class="fs-15 d-block text-secondary fw-medium mb-1">Total Amount</span>
+                                <span class="fs-15 d-block fw-semibold text-primary">$<%= order.totalAmount.toFixed(2) %></span>
+                            </li>
+                            <li class="mb-3">
+                                <span class="fs-15 d-block text-secondary fw-medium mb-1">Items</span>
+                                <span class="fs-15 d-block"><%= order.products.length %> product<%= order.products.length !== 1 ? 's' : '' %></span>
+                            </li>
+                            <% if (order.notes) { %>
+                            <li class="mb-3">
+                                <span class="fs-15 d-block text-secondary fw-medium mb-1">Notes</span>
+                                <span class="fs-15 d-block"><%= order.notes %></span>
+                            </li>
+                            <% } %>
+                            <li class="mb-3">
+                                <span class="fs-15 d-block text-secondary fw-medium mb-1">Created</span>
+                                <span class="fs-15 d-block">
+                                    <%= order.createdAt ? order.createdAt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '—' %>
+                                </span>
+                            </li>
+                        </ul>
+
+                        <div class="d-flex flex-wrap gap-2 mt-3">
+                            <% if (isAdmin) { %>
+                            <a href="/edit-order/<%= order._id %>" class="btn btn-primary fw-normal text-white">
+                                <i class="material-symbols-outlined fs-16 fw-normal me-1" style="vertical-align: middle;">edit</i>
+                                Edit
+                            </a>
+                            <form action="/delete-order/<%= order._id %>" method="POST"
+                                onsubmit="return confirm('Delete order #<%= order._id.toString().slice(-6) %>?');">
+                                <button type="submit" class="btn btn-danger fw-normal text-white">
+                                    <i class="material-symbols-outlined fs-16 fw-normal me-1" style="vertical-align: middle;">delete</i>
+                                    Delete
+                                </button>
+                            </form>
+                            <% } %>
+                            <a href="/orders-list" class="btn btn-outline-secondary fw-normal">Back</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Products table -->
+                <div class="col-lg-8">
+                    <div class="card bg-white rounded-10 border border-white p-20 mb-4">
+                        <h3 class="mb-20">Products</h3>
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead>
+                                <tr>
+                                    <th class="fw-medium">Product</th>
+                                    <th class="fw-medium">SKU</th>
+                                    <th class="fw-medium">Unit Price</th>
+                                    <th class="fw-medium">Qty</th>
+                                    <th class="fw-medium">Subtotal</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <% order.products.forEach(item => { %>
+                                <% const p = item.product; %>
+                                <tr>
+                                    <td class="fw-medium text-body"><%= p ? p.title : '(deleted product)' %></td>
+                                    <td class="text-body"><%= p ? (p.sku || '—') : '—' %></td>
+                                    <td class="text-body"><%= p ? '$' + p.price.toFixed(2) : '—' %></td>
+                                    <td class="text-body"><%= item.quantity %></td>
+                                    <td class="text-body fw-medium">
+                                        <%= p ? '$' + (p.price * item.quantity).toFixed(2) : '—' %>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="4" class="text-end fw-semibold">Total</td>
+                                    <td class="fw-semibold text-primary">$<%= order.totalAmount.toFixed(2) %></td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="flex-grow-1"></div>
+
+        <%- include('partials/footer') -%>
+    </div>
+</div>
+
+<script src="/assets/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/js/sidebar-menu.js"></script>
+<script src="/assets/js/simplebar.min.js"></script>
+<script src="/assets/js/custom/custom.js"></script>
+</body>
+</html>

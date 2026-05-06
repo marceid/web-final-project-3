@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="assets/css/sidebar-menu.css">
+    <link rel="stylesheet" href="assets/css/simplebar.css">
+    <link rel="stylesheet" href="assets/css/remixicon.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <title>Dashboard</title>
+</head>
+<body class="bg-body-bg">
+
+<%- include('partials/header') %>
+
+<div class="container-fluid">
+    <div class="main-content d-flex flex-column">
+        <div class="main-content-container overflow-hidden">
+
+            <!-- Stats -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card bg-white p-20 rounded-10 border border-white d-flex flex-row align-items-center gap-3">
+                        <div class="bg-info text-white text-center rounded-circle d-flex align-items-center justify-content-center" style="width:56px;height:56px;flex-shrink:0;">
+                            <span class="material-symbols-outlined fs-28">group</span>
+                        </div>
+                        <div>
+                            <p class="mb-1 fs-14 text-secondary">Total Customers</p>
+                            <h2 class="fs-24 fw-medium mb-0 lh-1"><%= customerCount %></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-white p-20 rounded-10 border border-white d-flex flex-row align-items-center gap-3">
+                        <div class="bg-warning text-white text-center rounded-circle d-flex align-items-center justify-content-center" style="width:56px;height:56px;flex-shrink:0;">
+                            <span class="material-symbols-outlined fs-28">inventory_2</span>
+                        </div>
+                        <div>
+                            <p class="mb-1 fs-14 text-secondary">Total Products</p>
+                            <h2 class="fs-24 fw-medium mb-0 lh-1"><%= productCount %></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-white p-20 rounded-10 border border-white d-flex flex-row align-items-center gap-3">
+                        <div class="bg-primary text-white text-center rounded-circle d-flex align-items-center justify-content-center" style="width:56px;height:56px;flex-shrink:0;">
+                            <span class="material-symbols-outlined fs-28">receipt_long</span>
+                        </div>
+                        <div>
+                            <p class="mb-1 fs-14 text-secondary">Total Orders</p>
+                            <h2 class="fs-24 fw-medium mb-0 lh-1"><%= orderCount %></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent tables -->
+            <div class="row">
+                <!-- Recent Customers -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card bg-white rounded-10 border border-white h-100">
+                        <div class="d-flex justify-content-between align-items-center p-20 pb-0">
+                            <h3 class="fs-16 fw-medium mb-0">Recent Customers</h3>
+                            <a href="/customers-list" class="fs-13 text-primary text-decoration-none">View all</a>
+                        </div>
+                        <div class="table-responsive p-20 pt-12">
+                            <table class="table align-middle mb-0">
+                                <tbody>
+                                <% recentCustomers.forEach(c => { %>
+                                <tr>
+                                    <td class="ps-0 py-2">
+                                        <a href="/customer-details/<%= c._id %>" class="text-decoration-none">
+                                            <p class="mb-0 fs-14 fw-medium hover-text"><%= c.name %></p>
+                                            <span class="fs-13 text-secondary"><%= c.email %></span>
+                                        </a>
+                                    </td>
+                                    <td class="py-2 text-end">
+                                        <a href="/customer-details/<%= c._id %>" class="bg-transparent p-0 border-0">
+                                            <span class="material-symbols-outlined fs-16 text-primary">visibility</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                                <% if (recentCustomers.length === 0) { %>
+                                <tr><td class="text-secondary fs-14 ps-0">No customers yet.</td></tr>
+                                <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Products -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card bg-white rounded-10 border border-white h-100">
+                        <div class="d-flex justify-content-between align-items-center p-20 pb-0">
+                            <h3 class="fs-16 fw-medium mb-0">Recent Products</h3>
+                            <a href="/all-products" class="fs-13 text-primary text-decoration-none">View all</a>
+                        </div>
+                        <div class="table-responsive p-20 pt-12">
+                            <table class="table align-middle mb-0">
+                                <tbody>
+                                <% recentProducts.forEach(p => { %>
+                                <tr>
+                                    <td class="ps-0 py-2">
+                                        <a href="/product-details/<%= p._id %>" class="text-decoration-none">
+                                            <p class="mb-0 fs-14 fw-medium hover-text"><%= p.title %></p>
+                                            <span class="fs-13 text-secondary">$<%= p.price.toFixed(2) %> &middot; <%= p.category %></span>
+                                        </a>
+                                    </td>
+                                    <td class="py-2 text-end">
+                                        <a href="/product-details/<%= p._id %>" class="bg-transparent p-0 border-0">
+                                            <span class="material-symbols-outlined fs-16 text-primary">visibility</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                                <% if (recentProducts.length === 0) { %>
+                                <tr><td class="text-secondary fs-14 ps-0">No products yet.</td></tr>
+                                <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card bg-white rounded-10 border border-white h-100">
+                        <div class="d-flex justify-content-between align-items-center p-20 pb-0">
+                            <h3 class="fs-16 fw-medium mb-0">Recent Orders</h3>
+                            <a href="/orders-list" class="fs-13 text-primary text-decoration-none">View all</a>
+                        </div>
+                        <div class="table-responsive p-20 pt-12">
+                            <table class="table align-middle mb-0">
+                                <tbody>
+                                <% recentOrders.forEach(o => { %>
+                                <tr>
+                                    <td class="ps-0 py-2">
+                                        <a href="/order-details/<%= o._id %>" class="text-decoration-none">
+                                            <p class="mb-0 fs-14 fw-medium hover-text"><%= o.user ? o.user.username : 'Unknown' %></p>
+                                            <span class="fs-13 text-secondary">$<%= o.totalAmount.toFixed(2) %> &middot;
+                                                <% const statusColors = { pending: 'warning', processing: 'info', shipped: 'primary', delivered: 'success', cancelled: 'danger' }; %>
+                                                <span class="text-<%= statusColors[o.status] || 'secondary' %>"><%= o.status %></span>
+                                            </span>
+                                        </a>
+                                    </td>
+                                    <td class="py-2 text-end">
+                                        <a href="/order-details/<%= o._id %>" class="bg-transparent p-0 border-0">
+                                            <span class="material-symbols-outlined fs-16 text-primary">visibility</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                                <% if (recentOrders.length === 0) { %>
+                                <tr><td class="text-secondary fs-14 ps-0">No orders yet.</td></tr>
+                                <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="flex-grow-1"></div>
+        <%- include('partials/footer') -%>
+    </div>
+</div>
+
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/sidebar-menu.js"></script>
+<script src="assets/js/simplebar.min.js"></script>
+<script src="assets/js/custom/custom.js"></script>
+</body>
+</html>

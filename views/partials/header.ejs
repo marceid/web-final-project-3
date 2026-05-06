@@ -1,0 +1,124 @@
+
+<!-- Start Preloader Area -->
+<div class="preloader" id="preloader">
+    <div class="preloader">
+        <div class="waviy position-relative">
+            <span class="d-inline-block">J</span>
+            <span class="d-inline-block">O</span>
+            <span class="d-inline-block">Y</span>
+            <span class="d-inline-block">A</span>
+        </div>
+    </div>
+</div>
+<!-- End Preloader Area -->
+
+<!-- Start Sidebar Area -->
+<div class="sidebar-area" id="sidebar-area">
+    <div class="logo position-relative d-flex align-items-center justify-content-between">
+        <a href="/dashboard" class="d-block text-decoration-none position-relative">
+            <img src="assets/images/logo-icon.png" alt="logo-icon">
+            <span class="logo-text text-secondary fw-semibold">JM</span>
+        </a>
+        <button class="sidebar-burger-menu-close bg-transparent py-3 border-0 opacity-0 z-n1 position-absolute top-50 end-0 translate-middle-y" id="sidebar-burger-menu-close">
+            <span class="border-1 d-block for-dark-burger" style="border-bottom: 1px solid #475569; height: 1px; width: 25px; transform: rotate(45deg);"></span>
+            <span class="border-1 d-block for-dark-burger" style="border-bottom: 1px solid #475569; height: 1px; width: 25px; transform: rotate(-45deg);"></span>
+        </button>
+        <button class="sidebar-burger-menu bg-transparent p-0 border-0" id="sidebar-burger-menu">
+            <span class="border-1 d-block for-dark-burger" style="border-bottom: 1px solid #475569; height: 1px; width: 25px;"></span>
+            <span class="border-1 d-block for-dark-burger" style="border-bottom: 1px solid #475569; height: 1px; width: 25px; margin: 6px 0;"></span>
+            <span class="border-1 d-block for-dark-burger" style="border-bottom: 1px solid #475569; height: 1px; width: 25px;"></span>
+        </button>
+    </div>
+
+    <aside id="layout-menu" class="layout-menu menu-vertical menu active" data-simplebar>
+        <ul class="menu-inner">
+            <li class="menu-title small text-uppercase">
+                <span class="menu-title-text">MAIN</span>
+            </li>
+
+            <li class="menu-item">
+                <a href="/dashboard" class="menu-link <%= currentPath === '/dashboard' ? 'active' : '' %>">
+                    <span class="material-symbols-outlined menu-icon">dashboard</span>
+                    <span class="title">Dashboard</span>
+                </a>
+            </li>
+
+            <li class="menu-title small text-uppercase">
+                <span class="menu-title-text">PRODUCTS</span>
+            </li>
+
+            <li class="menu-item">
+                <a href="/all-products" class="menu-link <%= currentPath === '/all-products' ? 'active' : '' %>">
+                    <span class="material-symbols-outlined menu-icon">inventory_2</span>
+                    <span class="title">All Products</span>
+                </a>
+            </li>
+
+            <li class="menu-item">
+                <a href="/customers-list" class="menu-link <%= currentPath === '/customers-list' ? 'active' : '' %>">
+                    <span class="material-symbols-outlined menu-icon">group</span>
+                    <span class="title">Customers</span>
+                </a>
+            </li>
+
+            <li class="menu-item">
+                <a href="/orders-list" class="menu-link <%= currentPath === '/orders-list' ? 'active' : '' %>">
+                    <span class="material-symbols-outlined menu-icon">receipt_long</span>
+                    <span class="title">Orders</span>
+                </a>
+            </li>
+
+            <% if (isUserAdmin(user)) { %>
+            <li class="menu-item">
+                <a href="/new-order" class="menu-link <%= currentPath === '/new-order' ? 'active' : '' %>">
+                    <span class="material-symbols-outlined menu-icon">add_shopping_cart</span>
+                    <span class="title">Create Order</span>
+                </a>
+            </li>
+            <% } %>
+
+            <% if (isUserAdmin(user)) { %>
+            <li class="menu-item">
+                <a href="/new-customer" class="menu-link <%= currentPath === '/new-customer' ? 'active' : '' %>">
+                    <span class="material-symbols-outlined menu-icon">person_add</span>
+                    <span class="title">Add Customer</span>
+                </a>
+            </li>
+            <% } %>
+
+            <% if (isUserAdmin(user)) { %>
+            <li class="menu-item">
+                <a href="/new-product" class="menu-link <%= currentPath === '/new-product' ? 'active' : '' %>">
+                    <span class="material-symbols-outlined menu-icon">add_box</span>
+                    <span class="title">Create Product</span>
+                </a>
+            </li>
+            <% } %>
+
+            <% if (isUserAdmin(user)) { %>
+            <li class="menu-title small text-uppercase">
+                <span class="menu-title-text">ADMIN</span>
+            </li>
+
+            <li class="menu-item">
+                <a href="/users-list" class="menu-link <%= currentPath === '/users-list' ? 'active' : '' %>">
+                    <span class="material-symbols-outlined menu-icon">manage_accounts</span>
+                    <span class="title">Users</span>
+                </a>
+            </li>
+            <% } %>
+
+            <li class="menu-title small text-uppercase">
+                <span class="menu-title-text">ACCOUNT</span>
+            </li>
+
+            <li class="menu-item">
+                <a href="/logout" class="menu-link">
+                    <span class="material-symbols-outlined menu-icon">logout</span>
+                    <span class="title">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+</div>
+<!-- End Sidebar Area -->

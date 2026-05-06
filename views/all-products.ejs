@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Links Of CSS File -->
+    <link rel="stylesheet" href="assets/css/sidebar-menu.css">
+    <link rel="stylesheet" href="assets/css/simplebar.css">
+    <link rel="stylesheet" href="assets/css/remixicon.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+
+    <!-- Title -->
+    <title>All Products</title>
+</head>
+<body class="bg-body-bg">
+
+<%- include('partials/header') -%>
+
+<!-- Start Main Content Area -->
+<div class="container-fluid">
+    <div class="main-content d-flex flex-column">
+
+
+        <div class="main-content-container overflow-hidden">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4 mt-1">
+                <h3 class="mb-0">Products List</h3>
+
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb align-items-center mb-0 lh-1">
+                        <li class="breadcrumb-item">
+                            <a href="/dashboard" class="d-flex align-items-center text-decoration-none">
+                                <i class="ri-home-8-line fs-15 text-primary me-1"></i>
+                                <span class="text-body fs-14 hover">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            <span>E-Commerce</span>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            <span class="text-secondary">Products List</span>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="card bg-white rounded-10 border border-white mb-4">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 p-20">
+                    <div class="d-flex flex-wrap gap-2 gap-xxl-5 align-items-center">
+                        <form class="table-src-form position-relative m-0" onsubmit="return false;">
+                            <input type="text" id="product-search" class="form-control w-340" placeholder="Search here...">
+                            <div class="src-btn position-absolute top-50 start-0 translate-middle-y bg-transparent p-0 border-0">
+                                <span class="material-symbols-outlined">search</span>
+                            </div>
+                        </form>
+                        <ul class="p-0 mb-0 list-unstyled d-flex align-items-center flex-wrap" style="gap: 20px;">
+                            <li class="fs-16">
+                                All Products <span class="text-primary">(<%= products.length %>)</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <% if(isAdmin){ %>
+                        <a href="/new-product" class="text-primary fs-16 text-decoration-none"> + Add New Product </a>
+                    <% } %>
+                </div>
+
+                <div class="default-table-area mx-minus-1 table-product-list">
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead>
+                            <tr>
+                                <th scope="col" class="fw-medium">Product ID</th>
+                                <th scope="col" class="fw-medium">Product</th>
+                                <th scope="col" class="fw-medium">Category</th>
+                                <th scope="col" class="fw-medium">Brand</th>
+                                <th scope="col" class="fw-medium">Type</th>
+                                <th scope="col" class="fw-medium">SKU</th>
+                                <th scope="col" class="fw-medium">Price</th>
+                                <th scope="col" class="fw-medium">Date Added</th>
+                                <th scope="col" class="fw-medium">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <% if (products.length === 0) { %>
+                            <tr>
+                                <td colspan="10" class="text-center text-body py-4">No products found.</td>
+                            </tr>
+                            <% } %>
+                            <% products.forEach(product => { %>
+                            <tr data-searchable="<%= [product.title, product.category, product.brand, product.type, product.sku].filter(Boolean).join(' ').toLowerCase() %>">
+                                <td class="text-body">#<%= product._id.toString().slice(-6) %></td>
+                                <td class="text-body">
+                                    <div class="d-flex align-items-center">
+                                        <a href="#" class="flex-shrink-0">
+                                            <img src="/uploads/<%= product.image %>" style="width: 50px; height: 50px; object-fit: cover;" class="rounded-circle" alt="<%= product.title %>">
+                                        </a>
+                                        <div class="flex-grow-1 ms-12">
+                                            <span class="fs-16 text-secondary fw-medium"><%= product.title %></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-body"><%= product.category || '—' %></td>
+                                <td class="text-body"><%= product.brand || '—' %></td>
+                                <td class="text-body"><%= product.type || '—' %></td>
+                                <td class="text-body"><%= product.sku || '—' %></td>
+                                <td class="text-body"><%= product.price != null ? '$' + product.price.toFixed(2) : '—' %></td>
+                                <td class="text-body"><%= product.createdAt ? product.createdAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—' %></td>
+                                <td>
+                                    <div class="d-flex justify-content-end" style="gap: 12px;">
+                                        <a href="/product-details/<%= product._id %>" class="bg-transparent p-0 border-0 hover-text-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="View Details">
+                                            <i class="material-symbols-outlined fs-16 fw-normal text-body">visibility</i>
+                                        </a>
+                                        <% if (isAdmin) { %>
+                                        <a href="/edit-product/<%= product._id %>" class="bg-transparent p-0 border-0 hover-text-success" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Product">
+                                            <i class="material-symbols-outlined fs-16 fw-normal text-body">edit</i>
+                                        </a>
+                                        <form action="/delete-product/<%= product._id %>" method="POST" style="display:inline;">
+                                            <button type="submit" class="bg-transparent p-0 border-0 hover-text-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete">
+                                                <i class="material-symbols-outlined fs-16 fw-normal text-body">delete</i>
+                                            </button>
+                                        </form>
+                                        <% } %>
+                                    </div>
+                                </td>
+                            </tr>
+                            <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex justify-content-center justify-content-sm-between align-items-center text-center flex-wrap gap-2 showing-wrap pt-15 p-20">
+                        <span class="fs-15" id="showing-count">Showing <%= products.length %> <%= products.length === 1 ? 'entry' : 'entries' %></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-grow-1"></div>
+
+        <%- include('partials/footer') -%>
+    </div>
+</div>
+<!-- Start Main Content Area -->
+
+<!-- Link Of JS File -->
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/sidebar-menu.js"></script>
+<script src="assets/js/simplebar.min.js"></script>
+<script src="assets/js/custom/custom.js"></script>
+<script>
+    document.getElementById('product-search').addEventListener('input', function () {
+        const query = this.value.toLowerCase();
+        const rows = document.querySelectorAll('.table-product-list tbody tr[data-searchable]');
+        let visible = 0;
+        rows.forEach(row => {
+            const match = row.dataset.searchable.includes(query);
+            row.style.display = match ? '' : 'none';
+            if (match) visible++;
+        });
+        const label = visible === 1 ? 'entry' : 'entries';
+        document.getElementById('showing-count').textContent = `Showing ${visible} ${label}`;
+    });
+</script>
+</body>
+</html>
